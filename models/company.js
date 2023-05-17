@@ -52,6 +52,9 @@ class Company {
   /** Find all companies.
    *
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
+   *
+   * Takes as input a queryObject, which is an object with up to three keys:
+   * name, maxEmployees, and minEmployees
    * */
 
   static async findAll(queryObject) {

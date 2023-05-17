@@ -40,32 +40,27 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 /** GET /  =>
  *   { companies: [ { handle, name, description, numEmployees, logoUrl }, ...] }
  *
- * Can filter on provided search filters:
+ * Can filter on provided search filters in the query string:
  * - minEmployees
  * - maxEmployees
  * - nameLike (will find case-insensitive, partial matches)
- *
+ * *
  * Authorization required: none
  */
 
 router.get("/", async function (req, res, next) {
-//check if a query string exists
-//extract the keys from the query object
+  const queryObject = {};
 
-//if it does not, simply return all of the companies
-
-const queryObject = {}
-if (Object.keys(req.query).length !== 0) {
+  // turns query string into object, uses JSONSchema to validate
+  if (Object.keys(req.query).length !== 0) {
 
     for (const key in req.query) {
-      queryObject[key] = Number(req.query[key]) || req.query[key]
+      queryObject[key] = Number(req.query[key]) || req.query[key];
     }
 
     if (queryObject.minEmployees > queryObject.maxEmployees) {
-        throw new BadRequestError("minEmployees needs to be less than or equal to maxEmployees.");
+      throw new BadRequestError("minEmployees needs to be less than or equal to maxEmployees.");
     }
-
-    console.log('QUERY OBJECT', queryObject)
 
     const validator = jsonschema.validate(queryObject, companyFilterSchema, {
       required: true,
@@ -75,12 +70,11 @@ if (Object.keys(req.query).length !== 0) {
       const errs = validator.errors.map(e => e.stack);
       throw new BadRequestError(errs);
     }
-
-
   }
 
-  // const companies = await Company.findAll(queryObject);
+  // queryObject is an {} with keys that were found in query string
   const companies = await Company.findAll(queryObject);
+
   return res.json({ companies });
 });
 

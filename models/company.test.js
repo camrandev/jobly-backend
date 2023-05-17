@@ -60,7 +60,70 @@ describe("create", function () {
 
 describe("findAll", function () {
   test("works: no filter", async function () {
-    let companies = await Company.findAll();
+    let companies = await Company.findAll({});
+    expect(companies).toEqual([
+      {
+        handle: "c1",
+        name: "C1",
+        description: "Desc1",
+        numEmployees: 1,
+        logoUrl: "http://c1.img",
+      },
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      },
+    ]);
+  });
+
+  test("works: filter out all companies", async function () {
+    const queryObject = {
+      maxEmployees: 1,
+      nameLike: "3"
+    }
+    let companies = await Company.findAll(queryObject);
+    expect(companies).toEqual([]);
+  });
+
+  test("works: filter out some companies", async function () {
+    const queryObject = {
+      minEmployees: 2,
+    }
+    let companies = await Company.findAll(queryObject);
+    expect(companies).toEqual([
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      },
+    ]);
+  });
+
+  test("works: filter out no companies", async function () {
+    const queryObject = {
+      name: "c",
+      maxEmployees: 100,
+    }
+    let companies = await Company.findAll(queryObject);
     expect(companies).toEqual([
       {
         handle: "c1",
