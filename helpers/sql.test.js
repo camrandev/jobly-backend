@@ -3,10 +3,10 @@
 const { sqlForPartialUpdate } = require("./sql");
 const { BadRequestError } = require("../expressError");
 
-const DATA_TO_UPDATE = {firstName: 'Aliya', age: 32}
+const DATA_TO_UPDATE = { firstName: "Aliya", age: 32 };
 const JS_TO_SQL = {
   firstName: "first_name",
-}
+};
 
 describe("sqlForPartialUpdate", function () {
   test("works: returns expected data", function () {
@@ -18,8 +18,9 @@ describe("sqlForPartialUpdate", function () {
   });
 
   test("no JSON data: throws 400 BadRequestError", function () {
-    const result = sqlForPartialUpdate({}, JS_TO_SQL)
-    expect(result).toThrow(BadRequestError);
+    expect(() => {
+      sqlForPartialUpdate({}, JS_TO_SQL);
+    }).toThrow(BadRequestError);
   });
 
   // test("works: default no admin", function () {
