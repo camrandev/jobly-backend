@@ -58,39 +58,61 @@ class Company {
    * */
 
   static async findAll(queryObject) {
-
     // TODO: move the where builder into a helper function
 
-    let whereQuery = [];
-
+    const keys = Object.keys(queryObject);
+    let whereValues = Object.values(queryObject);
+    
     // TODO: beware the sql injection! (return an array of wherequery and values)
+    const whereSql = keys.map((colName, idx) => {
+      let whereClause = "";
 
-    for (let criteria in queryObject) {
-      if (criteria === "nameLike") {
-        whereQuery.push(`name ILIKE '%${queryObject[criteria]}%'`);
+      if (colName === "nameLike") {
+        whereClause = `name ILIKE '%' || $1 || '%'`;
+      } else if (colName === "minEmployees") {
+        whereClause = `num_employees >= $${idx + 1}`;
+      } else if (colName === "maxEmployees") {
+        whereClause = `num_employees <= $${idx + 1}`;
       }
-      if (criteria === "minEmployees") {
-        whereQuery.push(`num_employees >= ${queryObject[criteria]}`);
-      }
-      if (criteria === "maxEmployees") {
-        whereQuery.push(`num_employees <= ${queryObject[criteria]}`);
-      }
-    }
 
-    whereQuery =
+      return whereClause;
+    });
+
+    // console.log("WhereValues=", whereValues);
+
+    // let whereQuery = [];
+    // for (let criteria in queryObject) {
+    //   if (criteria === "nameLike") {
+    //     whereQuery.push(`name ILIKE '%${queryObject[criteria]}%'`);
+    //   }
+    //   if (criteria === "minEmployees") {
+    //     whereQuery.push(`num_employees >= ${queryObject[criteria]}`);
+    //   }
+    //   if (criteria === "maxEmployees") {
+    //     whereQuery.push(`num_employees <= ${queryObject[criteria]}`);
+    //   }
+    // }
+
+    const whereQuery =
       Object.keys(queryObject).length === 0
         ? ""
-        : `WHERE ${whereQuery.join(" AND ")}`;
+        : `WHERE ${whereSql.join(" AND ")}`;
 
-    const companiesRes = await db.query(`
-        SELECT handle,
+    console.log("whereQuery=", whereQuery);
+
+    const companiesRes = await db.query(
+      `
+    SELECT handle,
                name,
                description,
                num_employees AS "numEmployees",
                logo_url      AS "logoUrl"
         FROM companies
         ${whereQuery}
-        ORDER BY name`);
+        ORDER BY name`,
+      whereValues
+    );
+
     return companiesRes.rows;
   }
 
@@ -106,10 +128,10 @@ class Company {
     const companyRes = await db.query(
       `
         SELECT handle,
-               name,
-               description,
-               num_employees AS "numEmployees",
-               logo_url      AS "logoUrl"
+        name,
+        description,
+        num_employees AS "numEmployees",
+        logo_url      AS "logoUrl"
         FROM companies
         WHERE handle = $1`,
       [handle]
@@ -142,12 +164,12 @@ class Company {
     const handleVarIdx = "$" + (values.length + 1);
 
     const querySql = `
-        UPDATE companies
-        SET ${setCols}
-        WHERE handle = ${handleVarIdx}
-        RETURNING
-            handle,
-            name,
+    UPDATE companies
+    SET ${setCols}
+    WHERE handle = ${handleVarIdx}
+    RETURNING
+    handle,
+    name,
             description,
             num_employees AS "numEmployees",
             logo_url AS "logoUrl"`;
