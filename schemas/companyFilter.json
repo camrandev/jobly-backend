@@ -14,7 +14,7 @@
     },
     "maxEmployees": {
       "type": "integer",
-      "min":1
+      "min": 1
     }
   },
   "additionalProperties": false
