@@ -58,7 +58,12 @@ class Company {
    * */
 
   static async findAll(queryObject) {
+
+    // TODO: move the where builder into a helper function
+
     let whereQuery = [];
+
+    // TODO: beware the sql injection! (return an array of wherequery and values)
 
     for (let criteria in queryObject) {
       if (criteria === "nameLike") {

@@ -51,13 +51,20 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 router.get("/", async function (req, res, next) {
   const queryObject = {};
 
+  // to figure out whether to move something into a helper file, ask:
+    // will you be using this function in multiple places?
+
   // turns query string into object, uses JSONSchema to validate
   if (Object.keys(req.query).length !== 0) {
 
+    // another option instead of creating a new object on line 52
+      // assign req.query to a variable
+      // check for each criteria, if exists, cast that into desired type and mutate variable
     for (const key in req.query) {
       queryObject[key] = Number(req.query[key]) || req.query[key];
     }
 
+    //TODO: move into models
     if (queryObject.minEmployees > queryObject.maxEmployees) {
       throw new BadRequestError("minEmployees needs to be less than or equal to maxEmployees.");
     }

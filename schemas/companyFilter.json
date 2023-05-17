@@ -17,5 +17,6 @@
       "min": 1
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "required": []
 }
