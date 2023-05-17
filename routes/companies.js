@@ -49,14 +49,23 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
  */
 
 router.get("/", async function (req, res, next) {
-  if (req.query) {
-    const { minEmployees, maxEmployees, nameLike } = req.query;
+//check if a query string exists
+//extract the keys from the query object
 
-    const queryObject = {
-      minEmployees: Number(minEmployees),
-      maxEmployees: Number(maxEmployees),
-      nameLike,
-    };
+//if it does not, simply return all of the companies
+
+const queryObject = {}
+if (Object.keys(req.query).length !== 0) {
+
+    for (const key in req.query) {
+      queryObject[key] = Number(req.query[key]) || req.query[key]
+    }
+
+    if (queryObject.minEmployees > queryObject.maxEmployees) {
+        throw new BadRequestError("minEmployees needs to be less than or equal to maxEmployees.");
+    }
+
+    console.log('QUERY OBJECT', queryObject)
 
     const validator = jsonschema.validate(queryObject, companyFilterSchema, {
       required: true,
@@ -67,11 +76,10 @@ router.get("/", async function (req, res, next) {
       throw new BadRequestError(errs);
     }
 
-    if (minEmployees && maxEmployees && (minEmployees > maxEmployees)) {
-      throw new BadRequestError("minEmployees needs to be less than or equal to maxEmployees.");
-    }
+
   }
 
+  // const companies = await Company.findAll(queryObject);
   const companies = await Company.findAll(queryObject);
   return res.json({ companies });
 });

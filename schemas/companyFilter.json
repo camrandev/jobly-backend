@@ -3,7 +3,7 @@
   "$id": "http://our.company.com/companyNew.schema.json",
   "type": "object",
   "properties": {
-    "nameLIke": {
+    "nameLike": {
       "type": "string",
       "minLength": 1,
       "maxLength": 30
