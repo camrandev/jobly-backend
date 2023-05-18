@@ -34,6 +34,7 @@ router.post(
       throw new BadRequestError(errs);
     }
 
+    console.log("hi")
     const job = await Job.create(req.body);
     return res.status(201).json({ job });
   });

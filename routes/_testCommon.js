@@ -3,13 +3,15 @@
 const db = require("../db.js");
 const User = require("../models/user");
 const Company = require("../models/company");
+const Job = require("../models/jobs")
 const { createToken } = require("../helpers/tokens");
 
 async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
+  await db.query("ALTER SEQUENCE jobs_id_seq RESTART WITH 1")
   await db.query("DELETE FROM users");
-  // noinspection SqlWithoutWhere
   await db.query("DELETE FROM companies");
+  await db.query("DELETE FROM jobs")
 
   await Company.create(
     {
