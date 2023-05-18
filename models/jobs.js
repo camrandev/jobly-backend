@@ -21,7 +21,7 @@ class Job {
       `
         SELECT id
         FROM jobs
-        WHERE title = $1, salary = $2, equity = $3, company_handle = $4`,
+        WHERE title=$1 AND salary=$2 AND equity=$3 AND company_handle=$4`,
       [title, salary, equity, company_handle]
     );
 
@@ -30,10 +30,9 @@ class Job {
 
     const result = await db.query(
       `
-                INSERT INTO jobs (title, salary, equity, company_handle)
-                VALUES ($1, $2, $3, $4)
-                RETURNING
-                id, title, salary, equity, company_handle AS "companyHandle`,
+        INSERT INTO jobs (title, salary, equity, company_handle)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id, title, salary, equity, company_handle AS "companyHandle"`,
       [title, salary, equity, company_handle]
     );
     const job = result.rows[0];
@@ -52,7 +51,7 @@ class Job {
       `
     SELECT id, title, salary, equity, company_handle AS "companyHandle"
         FROM jobs
-        ORDER BY name`
+        ORDER BY id`
     );
 
     return jobs.rows;
@@ -61,16 +60,13 @@ class Job {
   /** Given a job id, return data about job.
    *
    * Returns { id, title, salary, equity, company },
-   *   where company is
-   *   { handle, name, description,
-   *   num_employees AS "numEmployees",
-   *   logo_url AS "logoUrl" },
+   *   where company is { handle, name, description, numEmployees, logoUrl }
    *
    * Throws NotFoundError if not found.
    **/
 
   static async get(id) {
-    const job = await db.query(
+    const jobRes = await db.query(
       `
         SELECT j.id, j.title, j.salary, j.equity, j.company_handle AS "companyHandle", c.name, c.description,
         c.num_employees AS "numEmployees",
@@ -82,21 +78,23 @@ class Job {
       [id]
     );
 
-    const job = job.rows[0];
+    const job = jobRes.rows[0];
 
-    if (!job) throw new NotFoundError(`No job: ${handle}`);
+    console.log("job", job)
+
+    if (!job) throw new NotFoundError(`No job: ${id}`);
 
     return {
-      id: job[id],
-      title: job[title],
-      salary: job[salary],
-      equity: job[equity],
+      id: job.id,
+      title: job.title,
+      salary: job.salary,
+      equity: job.equity,
       company: {
-        handle: job[companyHandle],
-        name: job[name],
-        description: job[description],
-        numEmployees: job[numEmployees],
-        logoUrl: job[logoUrl],
+        handle: job.companyHandle,
+        name: job.name,
+        description: job.description,
+        numEmployees: job.numEmployees,
+        logoUrl: job.logoUrl,
       },
     };
   }
@@ -113,15 +111,15 @@ class Job {
    */
 
   static async update(id, data) {
-    const { setCols, values } = sqlForPartialUpdate(data);
+    const { setCols, values } = sqlForPartialUpdate(data, {});
     const idVarIdx = "$" + (values.length + 1);
 
     const querySql = `
     UPDATE jobs
     SET ${setCols}
     WHERE id = ${idVarIdx}
-    RETURNING
-    id, title, salary, equity, company`;
+    RETURNING id, title, salary, equity, company_handle`;
+
     const result = await db.query(querySql, [...values, id]);
     const job = result.rows[0];
 
