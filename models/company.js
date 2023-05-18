@@ -3,6 +3,8 @@
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
+const { queryToWhereSQL } = require("../helpers/company");
+
 
 /** Related functions for companies. */
 
@@ -58,49 +60,7 @@ class Company {
    * */
 
   static async findAll(queryObject) {
-    // TODO: move the where builder into a helper function
-    const keys = Object.keys(queryObject);
-    let whereValues = Object.values(queryObject);
-
-    // TODO: beware the sql injection! (return an array of wherequery and values)
-    const whereSql = keys.map((colName, idx) => {
-      // let whereClause;
-
-      if (colName === "nameLike") {
-        return `name ILIKE '%' || $1 || '%'`;
-      } else if (colName === "minEmployees") {
-        return `num_employees >= $${idx + 1}`;
-      } else if (colName === "maxEmployees") {
-        return `num_employees <= $${idx + 1}`;
-      }
-      // console.log('whereClauseInsideMap=', whereClause)
-
-      // return whereClause;
-    });
-
-    // console.log("whereSql=", whereSql)
-
-    // console.log("WhereValues=", whereValues);
-
-    // let whereQuery = [];
-    // for (let criteria in queryObject) {
-    //   if (criteria === "nameLike") {
-    //     whereQuery.push(`name ILIKE '%${queryObject[criteria]}%'`);
-    //   }
-    //   if (criteria === "minEmployees") {
-    //     whereQuery.push(`num_employees >= ${queryObject[criteria]}`);
-    //   }
-    //   if (criteria === "maxEmployees") {
-    //     whereQuery.push(`num_employees <= ${queryObject[criteria]}`);
-    //   }
-    // }
-
-    const whereQuery =
-      Object.keys(queryObject).length === 0
-        ? ""
-        : `WHERE ${whereSql.join(" AND ")}`;
-
-    console.log("where query=", whereQuery)
+    const {whereSQL, whereValues} = queryToWhereSQL(queryObject)
 
     const companiesRes = await db.query(
       `
@@ -110,7 +70,7 @@ class Company {
                num_employees AS "numEmployees",
                logo_url      AS "logoUrl"
         FROM companies
-        ${whereQuery}
+        ${whereSQL}
         ORDER BY name`,
       whereValues
     );

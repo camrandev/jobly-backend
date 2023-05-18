@@ -120,7 +120,7 @@ describe("findAll", function () {
 
   test("works: filter out no companies", async function () {
     const queryObject = {
-      name: "c",
+      nameLike: "c",
       maxEmployees: 100,
     }
     let companies = await Company.findAll(queryObject);
