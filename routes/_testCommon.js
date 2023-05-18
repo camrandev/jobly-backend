@@ -58,7 +58,7 @@ async function commonBeforeAll() {
     lastName: "U3L",
     email: "user3@user.com",
     password: "password3",
-    isAdmin: false,
+    isAdmin: true,
   });
 }
 
@@ -75,13 +75,15 @@ async function commonAfterAll() {
 }
 
 
-const u1Token = createToken({ username: "u1", isAdmin: false });
+const nonAdminToken = createToken({ username: "u1", isAdmin: false });
 
+const adminToken = createToken({ username: "u3", isAdmin: true });
 
 module.exports = {
   commonBeforeAll,
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
-  u1Token,
+  nonAdminToken,
+  adminToken,
 };

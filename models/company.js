@@ -60,6 +60,10 @@ class Company {
    * */
 
   static async findAll(queryObject) {
+    if (queryObject.minEmployees > queryObject.maxEmployees) {
+      throw new BadRequestError("minEmployees needs to be less than or equal to maxEmployees.");
+    }
+
     const {whereSQL, whereValues} = queryToWhereSQL(queryObject)
 
     const companiesRes = await db.query(

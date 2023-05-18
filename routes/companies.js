@@ -6,7 +6,7 @@ const jsonschema = require("jsonschema");
 const express = require("express");
 
 const { BadRequestError } = require("../expressError");
-const { ensureLoggedIn } = require("../middleware/auth");
+const { ensureLoggedIn, ensureUserIsAdmin } = require("../middleware/auth");
 const Company = require("../models/company");
 
 const companyNewSchema = require("../schemas/companyNew.json");
@@ -21,21 +21,23 @@ const router = new express.Router();
  *
  * Returns { handle, name, description, numEmployees, logoUrl }
  *
- * Authorization required: login
+ * Authorization required: logged in and isAdmin
  */
-router.post("/", ensureLoggedIn, async function (req, res, next) {
-  //TODO: admin only
-  const validator = jsonschema.validate(req.body, companyNewSchema, {
-    required: true,
-  });
-  if (!validator.valid) {
-    const errs = validator.errors.map((e) => e.stack);
-    throw new BadRequestError(errs);
-  }
+router.post(
+  "/",
+  ensureUserIsAdmin,
+  async function (req, res, next) {
+    const validator = jsonschema.validate(req.body, companyNewSchema, {
+      required: true,
+    });
+    if (!validator.valid) {
+      const errs = validator.errors.map((e) => e.stack);
+      throw new BadRequestError(errs);
+    }
 
-  const company = await Company.create(req.body);
-  return res.status(201).json({ company });
-});
+    const company = await Company.create(req.body);
+    return res.status(201).json({ company });
+  });
 
 /** GET /  =>
  *   { companies: [ { handle, name, description, numEmployees, logoUrl }, ...] }
@@ -52,21 +54,16 @@ router.get("/", async function (req, res, next) {
   const queryObject = {};
 
   // to figure out whether to move something into a helper file, ask:
-    // will you be using this function in multiple places?
+  // will you be using this function in multiple places?
 
   // turns query string into object, uses JSONSchema to validate
   if (Object.keys(req.query).length !== 0) {
 
     // another option instead of creating a new object on line 52
-      // assign req.query to a variable
-      // check for each criteria, if exists, cast that into desired type and mutate variable
+    // assign req.query to a variable
+    // check for each criteria, if exists, cast that into desired type and mutate variable
     for (const key in req.query) {
       queryObject[key] = Number(req.query[key]) || req.query[key];
-    }
-
-    //TODO: move into models
-    if (queryObject.minEmployees > queryObject.maxEmployees) {
-      throw new BadRequestError("minEmployees needs to be less than or equal to maxEmployees.");
     }
 
     const validator = jsonschema.validate(queryObject, companyFilterSchema, {
@@ -106,30 +103,34 @@ router.get("/:handle", async function (req, res, next) {
  *
  * Returns { handle, name, description, numEmployees, logo_url }
  *
- * Authorization required: login
+ * Authorization required: logged in and isAdmin
  */
-router.patch("/:handle", ensureLoggedIn, async function (req, res, next) {
-  //TODO: admin only
-  const validator = jsonschema.validate(req.body, companyUpdateSchema, {
-    required: true,
-  });
-  if (!validator.valid) {
-    const errs = validator.errors.map((e) => e.stack);
-    throw new BadRequestError(errs);
-  }
+router.patch(
+  "/:handle",
+  ensureUserIsAdmin,
+  async function (req, res, next) {
+    const validator = jsonschema.validate(req.body, companyUpdateSchema, {
+      required: true,
+    });
+    if (!validator.valid) {
+      const errs = validator.errors.map((e) => e.stack);
+      throw new BadRequestError(errs);
+    }
 
-  const company = await Company.update(req.params.handle, req.body);
-  return res.json({ company });
-});
+    const company = await Company.update(req.params.handle, req.body);
+    return res.json({ company });
+  });
 
 /** DELETE /[handle]  =>  { deleted: handle }
  *
- * Authorization: login
+ * Authorization: logged in and isAdmin
  */
-router.delete("/:handle", ensureLoggedIn, async function (req, res, next) {
-  //TODO:admin only
-  await Company.remove(req.params.handle);
-  return res.json({ deleted: req.params.handle });
-});
+router.delete(
+  "/:handle",
+  ensureUserIsAdmin,
+  async function (req, res, next) {
+    await Company.remove(req.params.handle);
+    return res.json({ deleted: req.params.handle });
+  });
 
 module.exports = router;

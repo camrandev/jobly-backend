@@ -4,7 +4,7 @@
 
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");
-const { UnauthorizedError } = require("../expressError");
+const { UnauthorizedError, BadRequestError } = require("../expressError");
 
 /** Middleware: Authenticate user.
  *
@@ -43,26 +43,36 @@ function ensureLoggedIn(req, res, next) {
  * If not, raises Unauthorized.
  */
 function ensureUserIsAdmin(req, res, next) {
-  if (res.locals.user.isAdmin) return next();
-  throw new UnauthorizedError();
-}
-
-/** Middleware: Requires user is user for route. */
-function ensureCorrectUser(req, res, next) {
   const currentUser = res.locals.user;
-  const hasUnauthorizedUsername = currentUser?.username !== req.params.username;
 
-  if (!currentUser || hasUnauthorizedUsername) {
+  if (currentUser === undefined) {
     throw new UnauthorizedError();
   }
 
-  return next();
+  if (Object.keys(currentUser).length === 0) {
+    throw new BadRequestError();
+  }
+
+  if (currentUser?.isAdmin === true) return next();
+
+  throw new UnauthorizedError();
 }
 
 /**ensure admin OR current */
 function ensureAdminOrCurrent(req, res, next) {
-  if (res.locals.user.isAdmin) return next();
-  if (res.locals.user?.username === req.params.username) return next();
+  const currentUser = res.locals.user;
+
+  if (currentUser === undefined) {
+    throw new UnauthorizedError();
+  }
+
+  if (Object.keys(currentUser).length === 0) {
+    throw new BadRequestError();
+  }
+
+  if (currentUser?.isAdmin === true || currentUser?.username === req.params.username) {
+    return next();
+  }
 
   throw new UnauthorizedError();
 }
@@ -71,6 +81,5 @@ module.exports = {
   authenticateJWT,
   ensureLoggedIn,
   ensureUserIsAdmin,
-  ensureCorrectUser,
   ensureAdminOrCurrent,
 };
