@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");
 const { UnauthorizedError } = require("../expressError");
 
-
 /** Middleware: Authenticate user.
  *
  * If a token was provided, verify it, and, if valid, store the token payload
@@ -27,7 +26,6 @@ function authenticateJWT(req, res, next) {
     }
   }
   return next();
-
 }
 
 /** Middleware to use when they must be logged in.
@@ -40,8 +38,39 @@ function ensureLoggedIn(req, res, next) {
   throw new UnauthorizedError();
 }
 
+/** Middleware to use when user must be an admin.
+ *
+ * If not, raises Unauthorized.
+ */
+function ensureUserIsAdmin(req, res, next) {
+  if (res.locals.user.isAdmin) return next();
+  throw new UnauthorizedError();
+}
+
+/** Middleware: Requires user is user for route. */
+function ensureCorrectUser(req, res, next) {
+  const currentUser = res.locals.user;
+  const hasUnauthorizedUsername = currentUser?.username !== req.params.username;
+
+  if (!currentUser || hasUnauthorizedUsername) {
+    throw new UnauthorizedError();
+  }
+
+  return next();
+}
+
+/**ensure admin OR current */
+function ensureAdminOrCurrent(req, res, next) {
+  if (res.locals.user.isAdmin) return next();
+  if (res.locals.user?.username === req.params.username) return next();
+
+  throw new UnauthorizedError();
+}
 
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
+  ensureUserIsAdmin,
+  ensureCorrectUser,
+  ensureAdminOrCurrent,
 };

@@ -23,8 +23,8 @@ const router = new express.Router();
  *
  * Authorization required: login
  */
-
 router.post("/", ensureLoggedIn, async function (req, res, next) {
+  //TODO: admin only
   const validator = jsonschema.validate(req.body, companyNewSchema, {
     required: true,
   });
@@ -108,8 +108,8 @@ router.get("/:handle", async function (req, res, next) {
  *
  * Authorization required: login
  */
-
 router.patch("/:handle", ensureLoggedIn, async function (req, res, next) {
+  //TODO: admin only
   const validator = jsonschema.validate(req.body, companyUpdateSchema, {
     required: true,
   });
@@ -126,8 +126,8 @@ router.patch("/:handle", ensureLoggedIn, async function (req, res, next) {
  *
  * Authorization: login
  */
-
 router.delete("/:handle", ensureLoggedIn, async function (req, res, next) {
+  //TODO:admin only
   await Company.remove(req.params.handle);
   return res.json({ deleted: req.params.handle });
 });
