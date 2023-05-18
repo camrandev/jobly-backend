@@ -59,24 +59,26 @@ class Company {
 
   static async findAll(queryObject) {
     // TODO: move the where builder into a helper function
-
     const keys = Object.keys(queryObject);
     let whereValues = Object.values(queryObject);
-    
+
     // TODO: beware the sql injection! (return an array of wherequery and values)
     const whereSql = keys.map((colName, idx) => {
-      let whereClause = "";
+      // let whereClause;
 
       if (colName === "nameLike") {
-        whereClause = `name ILIKE '%' || $1 || '%'`;
+        return `name ILIKE '%' || $1 || '%'`;
       } else if (colName === "minEmployees") {
-        whereClause = `num_employees >= $${idx + 1}`;
+        return `num_employees >= $${idx + 1}`;
       } else if (colName === "maxEmployees") {
-        whereClause = `num_employees <= $${idx + 1}`;
+        return `num_employees <= $${idx + 1}`;
       }
+      // console.log('whereClauseInsideMap=', whereClause)
 
-      return whereClause;
+      // return whereClause;
     });
+
+    // console.log("whereSql=", whereSql)
 
     // console.log("WhereValues=", whereValues);
 
@@ -98,7 +100,7 @@ class Company {
         ? ""
         : `WHERE ${whereSql.join(" AND ")}`;
 
-    console.log("whereQuery=", whereQuery);
+    console.log("where query=", whereQuery)
 
     const companiesRes = await db.query(
       `
