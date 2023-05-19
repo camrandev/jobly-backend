@@ -64,7 +64,7 @@ class Company {
       throw new BadRequestError("minEmployees needs to be less than or equal to maxEmployees.");
     }
 
-    const {whereSQL, whereValues} = queryToWhereSQL(queryObject)
+    const { whereSQL, whereValues } = queryToWhereSQL(queryObject);
 
     const companiesRes = await db.query(
       `
@@ -103,9 +103,19 @@ class Company {
       [handle]
     );
 
-    const company = companyRes.rows[0];
+    let company = companyRes.rows[0];
 
     if (!company) throw new NotFoundError(`No company: ${handle}`);
+
+    const jobsRes = await db.query(
+      `
+        SELECT id, title, salary, equity
+        FROM jobs
+        WHERE company_handle = $1`,
+      [company.handle]
+    );
+
+    company.jobs = jobsRes.rows;
 
     return company;
   }

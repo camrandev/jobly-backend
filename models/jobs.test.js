@@ -89,6 +89,74 @@ describe("findAll", function () {
       },
     ]);
   });
+
+  test("works: only title and minSalary, no hasEquity", async function () {
+    const queryObject = {
+      title: "2",
+      minSalary: 12
+    };
+    let jobs = await Job.findAll(queryObject);
+    expect(jobs).toEqual([]);
+  });
+
+  test("works: title, salary, and hasEquity = false", async function () {
+    const queryObject = {
+      title: "t",
+      minSalary: 10,
+      hasEquity: "false"
+    };
+    let jobs = await Job.findAll(queryObject);
+    expect(jobs).toEqual([
+      {
+        id: 2,
+        title: "t2",
+        salary: 10,
+        equity: "0.4",
+        companyHandle: "c2"
+      },
+      {
+        id: 3,
+        title: "t3",
+        salary: 15,
+        equity: "0.6",
+        companyHandle: "c3",
+      },
+    ]);
+  });
+
+  test("works: title, salary, and hasEquity = true", async function () {
+    const queryObject = {
+      title: "t",
+      minSalary: 5,
+      hasEquity: "true"
+    };
+    let jobs = await Job.findAll(queryObject);
+    expect(jobs).toEqual([
+      {
+        id: 1,
+        title: "t1",
+        salary: 5,
+        equity: "0.2",
+        companyHandle: "c1",
+      },
+      {
+        id: 2,
+        title: "t2",
+        salary: 10,
+        equity: "0.4",
+        companyHandle: "c2"
+      },
+      {
+        id: 3,
+        title: "t3",
+        salary: 15,
+        equity: "0.6",
+        companyHandle: "c3",
+      },
+    ]);
+  });
+
+
 });
 
 /************************************** get */

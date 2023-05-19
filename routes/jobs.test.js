@@ -113,6 +113,31 @@ describe("GET /jobs", function () {
       ],
     });
   });
+
+  test("ok for anon user with filtering", async function () {
+    const resp = await request(app).get("/jobs?title=t&minSalary=12");
+    expect(resp.body).toEqual({
+      jobs:
+        [
+          {
+            id: 3,
+            title: "t3",
+            salary: 15,
+            equity: "0.6",
+            companyHandle: "c3",
+          },
+        ],
+    });
+  });
+
+  test("throws BadRequestError if query string has invalid criteria", async function () {
+    const resp = await request(app).get("/jobs?tacos=many&burritos=-1");
+    expect(resp.statusCode).toEqual(400);
+    expect(resp.body.error.message).toEqual([
+			"instance is not allowed to have the additional property \"tacos\"",
+			"instance is not allowed to have the additional property \"burritos\""
+		]);
+  });
 });
 
 /************************************** GET /companies/:handle */

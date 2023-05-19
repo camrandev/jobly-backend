@@ -11,6 +11,7 @@ const Job = require("../models/jobs");
 
 const jobNewSchema = require("../schemas/jobNew.json");
 const jobUpdateSchema = require("../schemas/jobUpdate.json");
+const jobFilterSchema = require("../schemas/jobFilter.json");
 
 const router = new express.Router();
 
@@ -34,7 +35,7 @@ router.post(
       const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
-    
+
     const job = await Job.create(req.body);
     return res.status(201).json({ job });
   });
@@ -42,11 +43,37 @@ router.post(
 /** GET /  =>
  *   { job: [ { id, title, salary, equity, company_handle }, ...] }
  *
+ * Can filter on provided search filters in the query string:
+ * - title: will find case insensitive, partial matches
+ * - minSalary: filter to jobs with at least this salary
+ * - hasEquity: if true, filter for equity > 0.if false or not included,
+ *              no impact on search
+ *
  * Authorization required: none
  */
 
 router.get("/", async function (req, res, next) {
-  const jobs = await Job.findAll();
+  const queryObject = {};
+
+  // turns query string into object, uses JSONSchema to validate
+  if (Object.keys(req.query).length !== 0) {
+
+    for (const key in req.query) {
+      queryObject[key] = Number(req.query[key]) || req.query[key];
+    }
+
+    const validator = jsonschema.validate(queryObject, jobFilterSchema, {
+      required: true,
+    });
+
+    if (!validator.valid) {
+      const errs = validator.errors.map(e => e.stack);
+      throw new BadRequestError(errs);
+    }
+  }
+
+  // queryObject is an {} with keys that were found in query string
+  const jobs = await Job.findAll(queryObject);
 
   return res.json({ jobs });
 });

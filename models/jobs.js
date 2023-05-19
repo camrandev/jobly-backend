@@ -1,8 +1,10 @@
 "use strict";
 
+const { query } = require("express");
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
+const { queryToWhereSQL } = require("../helpers/jobs");
 
 /** Related functions for companies. */
 
@@ -34,7 +36,7 @@ class Job {
       VALUES ($1, $2, $3, $4)
       RETURNING id, title, salary, equity, company_handle AS "companyHandle"`,
       [title, salary, equity, companyHandle]
-      );
+    );
     const job = result.rows[0];
 
     return job;
@@ -44,17 +46,38 @@ class Job {
    *
    * Returns [{ id, title, salary, equity, company_handle }, ...]
    *
+   * Takes as input a queryObject, which is an object with up to three keys:
+   * title, minSalary, and hasEquity
+   *
    * */
 
-  static async findAll() {
-    const jobs = await db.query(
+  static async findAll(queryObject) {
+    const hasEquity = Boolean(queryObject["hasEquity"]);
+
+    if (hasEquity === false) {
+      delete queryObject["hasEquity"];
+    } else if (hasEquity === true) {
+      queryObject["hasEquity"] = 0;
+    }
+
+    console.log(queryObject)
+
+    const { whereSQL, whereValues } = queryToWhereSQL(queryObject);
+
+    const jobsRes = await db.query(
       `
-    SELECT id, title, salary, equity, company_handle AS "companyHandle"
+    SELECT id,
+               title,
+               salary,
+               equity,
+               company_handle AS "companyHandle"
         FROM jobs
-        ORDER BY id`
+        ${whereSQL}
+        ORDER BY id`,
+      whereValues
     );
 
-    return jobs.rows;
+    return jobsRes.rows;
   }
 
   /** Given a job id, return data about job.
@@ -80,7 +103,7 @@ class Job {
 
     const job = jobRes.rows[0];
 
-    console.log("job", job)
+    console.log("job", job);
 
     if (!job) throw new NotFoundError(`No job: ${id}`);
 
