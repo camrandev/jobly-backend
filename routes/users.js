@@ -49,7 +49,8 @@ router.post(
 );
 
 
-/** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
+/** GET / => { users: [ {username, firstName, lastName, email, job }, ... ] }
+ * where job => [jobId, jobId, ....]
  *
  * Returns list of all users.
  *

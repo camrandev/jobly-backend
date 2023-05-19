@@ -141,6 +141,7 @@ describe("GET /users", function () {
           lastName: "U1L",
           email: "user1@user.com",
           isAdmin: false,
+          jobs: [1, 2],
         },
         {
           username: "u2",
@@ -148,6 +149,7 @@ describe("GET /users", function () {
           lastName: "U2L",
           email: "user2@user.com",
           isAdmin: false,
+          jobs: [],
         },
         {
           username: "u3",
@@ -155,6 +157,7 @@ describe("GET /users", function () {
           lastName: "U3L",
           email: "user3@user.com",
           isAdmin: true,
+          jobs: [],
         },
       ],
     });
@@ -384,21 +387,21 @@ describe("DELETE /users/:username", function () {
 describe("POST /users/:username/jobs/:id", function () {
   test("works for admin: create job application", async function () {
     const resp = await request(app)
-      .post("/users/u1/jobs/1")
+      .post("/users/u1/jobs/3")
       .set("authorization", `Bearer ${adminToken}`);
     expect(resp.statusCode).toEqual(201);
     expect(resp.body).toEqual({
-      applied: 1
+      applied: 3
     });
   });
 
   test("works for curr user: create job application", async function () {
     const resp = await request(app)
-      .post("/users/u1/jobs/2")
+      .post("/users/u1/jobs/3")
       .set("authorization", `Bearer ${nonAdminToken}`);
     expect(resp.statusCode).toEqual(201);
     expect(resp.body).toEqual({
-      applied: 2
+      applied: 3
     });
   });
 
