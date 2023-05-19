@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://our.company.com/companyNew.schema.json",
+    "$id": "http://our.company.com/jobNew.schema.json",
     "type": "object",
     "properties": {
         "title": {
@@ -16,7 +16,7 @@
             "type": "number",
             "maximum": 1.0
         },
-        "company_handle": {
+        "companyHandle": {
             "type": "string",
             "minLength": 1,
             "maxLength": 30
@@ -27,6 +27,6 @@
         "title",
         "salary",
         "equity",
-        "company_handle"
+        "companyHandle"
     ]
 }

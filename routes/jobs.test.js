@@ -26,7 +26,7 @@ describe("POST /jobs", function () {
     title: "Cool job",
     salary: 999,
     equity: 0.5,
-    company_handle: "c1",
+    companyHandle: "c1",
   };
 
   test("works for admin", async function () {
@@ -34,7 +34,11 @@ describe("POST /jobs", function () {
       .post("/jobs")
       .send(newJob)
       .set("authorization", `Bearer ${adminToken}`);
+
+    console.log('message from failing test', resp)
+
     expect(resp.statusCode).toEqual(201);
+
     console.log("resp body in test", resp.body);
     expect(resp.body.job).toEqual({
       id: expect.any(Number),
@@ -71,7 +75,7 @@ describe("POST /jobs", function () {
         title: 100,
         salary: "tacos",
         equity: 0.5,
-        company_handle: "boyd-evans",
+        companyHandle: "boyd-evans",
       })
       .set("authorization", `Bearer ${adminToken}`);
     expect(resp.statusCode).toEqual(400);
@@ -156,7 +160,7 @@ describe("PATCH /jobs/:id", function () {
         title: "t1-new",
         salary: 5,
         equity: "0.2",
-        company_handle: "c1",
+        companyHandle: "c1",
       },
     });
   });

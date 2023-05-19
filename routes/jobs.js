@@ -29,12 +29,12 @@ router.post(
     const validator = jsonschema.validate(req.body, jobNewSchema, {
       required: true,
     });
+
     if (!validator.valid) {
       const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
-
-    console.log("hi")
+    
     const job = await Job.create(req.body);
     return res.status(201).json({ job });
   });
