@@ -56,7 +56,7 @@ class User {
    **/
 
   static async register(
-      { username, password, firstName, lastName, email, isAdmin }) {
+    { username, password, firstName, lastName, email, isAdmin }) {
     const duplicateCheck = await db.query(`
         SELECT username
         FROM users
@@ -84,13 +84,13 @@ class User {
                     last_name AS "lastName",
                     email,
                     is_admin AS "isAdmin"`, [
-          username,
-          hashedPassword,
-          firstName,
-          lastName,
-          email,
-          isAdmin,
-        ],
+      username,
+      hashedPassword,
+      firstName,
+      lastName,
+      email,
+      isAdmin,
+    ],
     );
 
     const user = result.rows[0];
@@ -166,12 +166,12 @@ class User {
     }
 
     const { setCols, values } = sqlForPartialUpdate(
-        data,
-        {
-          firstName: "first_name",
-          lastName: "last_name",
-          isAdmin: "is_admin",
-        });
+      data,
+      {
+        firstName: "first_name",
+        lastName: "last_name",
+        isAdmin: "is_admin",
+      });
     const usernameVarIdx = "$" + (values.length + 1);
 
     const querySql = `
@@ -204,6 +204,44 @@ class User {
     const user = result.rows[0];
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
+  }
+
+  /** Allows for a user to apply for a job.
+   *
+   * Takes as input two parameters: a user username, and a job id.
+   * Returns { username, jobId }
+   *
+   * Throws BadRequestError on duplicate job applications.
+   **/
+
+  static async applyForJob(username, jobId) {
+    const duplicateCheck = await db.query(`
+      SELECT username, job_id
+      FROM applications
+      WHERE username = $1 AND job_id = $2`, [username, jobId],
+    );
+
+    if (duplicateCheck.rows.length > 0) {
+      throw new BadRequestError(`Duplicate job application: applicant ${username}, jobId ${jobId}`);
+    }
+
+    const result = await db.query(`
+              INSERT INTO applications
+              (username,
+               job_id)
+              VALUES ($1, $2)
+              RETURNING
+                  username,
+                  job_id AS "jobId"`, [
+      username,
+      jobId,
+    ],
+    );
+
+    console.log("result", result)
+    const jobApp = result.rows[0];
+
+    return jobApp;
   }
 }
 

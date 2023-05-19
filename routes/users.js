@@ -18,6 +18,7 @@ const userUpdateSchema = require("../schemas/userUpdate.json");
 
 const router = express.Router();
 
+
 /** POST / { user }  => { user, token }
  *
  * Adds a new user. This is not the registration endpoint --- instead, this is
@@ -47,6 +48,7 @@ router.post(
   }
 );
 
+
 /** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
  *
  * Returns list of all users.
@@ -61,6 +63,7 @@ router.get(
     return res.json({ users });
   }
 );
+
 
 /** GET /[username] => { user }
  *
@@ -77,6 +80,7 @@ router.get(
     return res.json({ user });
   }
 );
+
 
 /** PATCH /[username] { user } => { user }
  *
@@ -104,6 +108,7 @@ router.patch(
     return res.json({ user });
   });
 
+
 /** DELETE /[username]  =>  { deleted: username }
  *
  * Authorization required: logged in, and either isAdmin OR is the user it's
@@ -116,5 +121,24 @@ router.delete(
     await User.remove(req.params.username);
     return res.json({ deleted: req.params.username });
   });
+
+
+/** POST /users/:username/jobs/:id  => { applied: jobId }
+ *
+ * Allows user to apply for a job, or an admin to do this for them.
+ * This returns JSON that looks like: { applied: jobId }
+ *
+ * Authorization required: isCurrentUser, or isAdmin (loggedin implied)
+ **/
+router.post(
+  "/:username/jobs/:id",
+  ensureAdminOrCurrent,
+  async function (req, res, next) {
+    const { username, id } = req.params;
+
+    const jobApp = await User.applyForJob(username, id);
+    return res.status(201).json({ applied: jobApp.jobId });
+  }
+);
 
 module.exports = router;
