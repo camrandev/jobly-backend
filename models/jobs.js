@@ -15,10 +15,23 @@ class Job {
    *
    * Returns { id, title, salary, equity, company_handle }
    *
-   * Throws BadRequestError if Job already in database.
+   * Throws BadRequestError if Job already in database, and NotFoundError if
+   * company handle doesn't exist.
    * */
 
   static async create({ title, salary, equity, companyHandle }) {
+
+    const handleExistsCheck = await db.query(
+      `
+        SELECT handle
+        FROM companies
+        WHERE handle=$1`,
+      [companyHandle]
+    );
+
+    if (handleExistsCheck.rows.length === 0)
+      throw new NotFoundError(`Company handle does not exist: ${companyHandle}`);
+
     const duplicateCheck = await db.query(
       `
         SELECT id

@@ -25,7 +25,7 @@ describe("create", function () {
     companyHandle: "c1",
   };
 
-  test("works", async function () {
+  test("works with valid inputs", async function () {
     const job = await Job.create(newJob);
     expect(job).toEqual({
       id: expect.any(Number),
@@ -48,7 +48,21 @@ describe("create", function () {
   });
 
   test("bad request with duplicate job", async function () {
-    console.log("job object", newJob);
+    try {
+      await Job.create({
+        title: "t4",
+        salary: 20,
+        equity: "0.8",
+        companyHandle: "nonexistentCompany",
+      });
+      throw new Error("fail test, you shouldn't get here");
+    } catch (err) {
+      console.log("err", err.status);
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+
+  test("not found error with company handle that doesn't exist", async function () {
     try {
       await Job.create(newJob);
       await Job.create(newJob);
@@ -58,6 +72,7 @@ describe("create", function () {
       expect(err instanceof BadRequestError).toBeTruthy();
     }
   });
+
 });
 
 /************************************** findAll */
@@ -155,14 +170,12 @@ describe("findAll", function () {
       },
     ]);
   });
-
-
 });
 
 /************************************** get */
 
 describe("get", function () {
-  test("works", async function () {
+  test("works: valid job id", async function () {
     let job = await Job.get(1);
     expect(job).toEqual({
       id: 1,
@@ -199,7 +212,7 @@ describe("update", function () {
     companyHandle: "c2",
   };
 
-  test("works", async function () {
+  test("works: valid update data", async function () {
     let job = await Job.update(1, updateData);
     expect(job).toEqual({
       id: 1,
@@ -274,14 +287,14 @@ describe("update", function () {
 /************************************** remove */
 
 describe("remove", function () {
-  test("works", async function () {
+  test("works: valid job id", async function () {
     await Job.remove(1);
     const res = await db.query(
       "SELECT id FROM jobs WHERE id=1");
     expect(res.rows.length).toEqual(0);
   });
 
-  test("not found if no job with id", async function () {
+  test("not found: invalid job id", async function () {
     try {
       await Job.remove(-1);
       throw new Error("fail test, you shouldn't get here");

@@ -80,6 +80,20 @@ describe("POST /jobs", function () {
       .set("authorization", `Bearer ${adminToken}`);
     expect(resp.statusCode).toEqual(400);
   });
+
+  //TODO: add test for no such company
+  test("not found error: invalid company handle", async function () {
+    const resp = await request(app)
+      .post("/jobs")
+      .send({
+        title: "Cool job",
+        salary: 1000,
+        equity: 0.5,
+        companyHandle: "does not exist",
+      })
+      .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.statusCode).toEqual(404);
+  });
 });
 
 /************************************** GET /companies */
@@ -140,7 +154,7 @@ describe("GET /jobs", function () {
   });
 });
 
-/************************************** GET /companies/:handle */
+/************************************** GET /jobs/:id */
 
 describe("GET /jobs/:id", function () {
   test("works for anon", async function () {
@@ -169,7 +183,7 @@ describe("GET /jobs/:id", function () {
   });
 });
 
-/************************************** PATCH /companies/:handle */
+/************************************** PATCH /jobs/:id */
 
 describe("PATCH /jobs/:id", function () {
   test("works for admin", async function () {
@@ -228,7 +242,7 @@ describe("PATCH /jobs/:id", function () {
   });
 });
 
-/************************************** DELETE /companies/:handle */
+/************************************** DELETE /jobs/:id */
 
 describe("DELETE /jobs/:id", function () {
   test("works for admin", async function () {

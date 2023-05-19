@@ -17,9 +17,9 @@ const router = new express.Router();
 
 /** POST / { job } =>  { job }
  *
- * Job should be { title, salary, equity, company_handle }
+ * job should have JSON body that looks like { title, salary, equity, companyHandle }
  *
- * Returns { id, title, salary, equity, company_handle }
+ * Returns { id, title, salary, equity, companyHandle }
  *
  * Authorization required: isAdmin
  */
@@ -41,7 +41,7 @@ router.post(
   });
 
 /** GET /  =>
- *   { job: [ { id, title, salary, equity, company_handle }, ...] }
+ *   { job: [ { id, title, salary, equity, companyHandle }, ...] }
  *
  * Can filter on provided search filters in the query string:
  * - title: will find case insensitive, partial matches
