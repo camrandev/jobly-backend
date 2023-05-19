@@ -16,28 +16,26 @@ class Job {
    * Throws BadRequestError if Job already in database.
    * */
 
-  static async create({ title, salary, equity, company_handle }) {
+  static async create({ title, salary, equity, companyHandle }) {
     const duplicateCheck = await db.query(
       `
         SELECT id
         FROM jobs
         WHERE title=$1 AND salary=$2 AND equity=$3 AND company_handle=$4`,
-      [title, salary, equity, company_handle]
+      [title, salary, equity, companyHandle]
     );
 
     if (duplicateCheck.rows[0])
-    throw new BadRequestError(`Duplicate job: ${id}`);
+      throw new BadRequestError(`Duplicate job: ${duplicateCheck.rows[0].id}`);
 
     const result = await db.query(
       `
       INSERT INTO jobs (title, salary, equity, company_handle)
       VALUES ($1, $2, $3, $4)
       RETURNING id, title, salary, equity, company_handle AS "companyHandle"`,
-      [title, salary, equity, company_handle]
+      [title, salary, equity, companyHandle]
       );
     const job = result.rows[0];
-    //TODO: feels hacky, but the equity is coming out of the DB as a string
-    // job.equity = Number(job.equity)
 
     return job;
   }
@@ -113,14 +111,16 @@ class Job {
    */
 
   static async update(id, data) {
-    const { setCols, values } = sqlForPartialUpdate(data, {});
+    const { setCols, values } = sqlForPartialUpdate(data, {
+      companyHandle: "company_handle",
+    });
     const idVarIdx = "$" + (values.length + 1);
 
     const querySql = `
     UPDATE jobs
     SET ${setCols}
     WHERE id = ${idVarIdx}
-    RETURNING id, title, salary, equity, company_handle`;
+    RETURNING id, title, salary, equity, company_handle AS "companyHandle"`;
 
     const result = await db.query(querySql, [...values, id]);
     const job = result.rows[0];
