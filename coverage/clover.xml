@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1684508421979" clover="3.2.0">
-  <project timestamp="1684508421979" name="All files">
-    <metrics statements="411" coveredstatements="410" conditionals="122" coveredconditionals="115" methods="70" coveredmethods="69" elements="603" coveredelements="594" complexity="0" loc="411" ncloc="411" packages="5" files="18" classes="18"/>
+<coverage generated="1684511826880" clover="3.2.0">
+  <project timestamp="1684511826880" name="All files">
+    <metrics statements="424" coveredstatements="423" conditionals="128" coveredconditionals="121" methods="72" coveredmethods="71" elements="624" coveredelements="615" complexity="0" loc="424" ncloc="424" packages="5" files="18" classes="18"/>
     <package name="jobly">
       <metrics statements="52" coveredstatements="51" conditionals="18" coveredconditionals="14" methods="8" coveredmethods="7"/>
       <file name="app.js" path="/Users/AshleyLin1/rithm/exercises/jobly/app.js">
@@ -27,10 +27,10 @@
         <line num="31" count="5" type="stmt"/>
         <line num="32" count="2" type="stmt"/>
         <line num="36" count="5" type="stmt"/>
-        <line num="37" count="49" type="cond" truecount="2" falsecount="0"/>
-        <line num="38" count="49" type="cond" truecount="1" falsecount="1"/>
-        <line num="39" count="49" type="stmt"/>
-        <line num="41" count="49" type="stmt"/>
+        <line num="37" count="52" type="cond" truecount="2" falsecount="0"/>
+        <line num="38" count="52" type="cond" truecount="1" falsecount="1"/>
+        <line num="39" count="52" type="stmt"/>
+        <line num="41" count="52" type="stmt"/>
         <line num="46" count="5" type="stmt"/>
       </file>
       <file name="config.js" path="/Users/AshleyLin1/rithm/exercises/jobly/config.js">
@@ -59,12 +59,12 @@
       </file>
       <file name="expressError.js" path="/Users/AshleyLin1/rithm/exercises/jobly/expressError.js">
         <metrics statements="8" coveredstatements="7" conditionals="4" coveredconditionals="3" methods="5" coveredmethods="4"/>
-        <line num="11" count="75" type="stmt"/>
-        <line num="12" count="75" type="stmt"/>
-        <line num="13" count="75" type="stmt"/>
+        <line num="11" count="79" type="stmt"/>
+        <line num="12" count="79" type="stmt"/>
+        <line num="13" count="79" type="stmt"/>
         <line num="21" count="20" type="stmt"/>
-        <line num="29" count="29" type="stmt"/>
-        <line num="37" count="26" type="stmt"/>
+        <line num="29" count="31" type="stmt"/>
+        <line num="37" count="28" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
         <line num="49" count="10" type="stmt"/>
       </file>
@@ -135,12 +135,12 @@
         <line num="5" count="6" type="stmt"/>
         <line num="6" count="6" type="stmt"/>
         <line num="7" count="6" type="stmt"/>
-        <line num="18" count="79" type="stmt"/>
-        <line num="19" count="79" type="cond" truecount="2" falsecount="0"/>
-        <line num="20" count="47" type="stmt"/>
-        <line num="22" count="47" type="stmt"/>
-        <line num="23" count="47" type="stmt"/>
-        <line num="28" count="79" type="stmt"/>
+        <line num="18" count="84" type="stmt"/>
+        <line num="19" count="84" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="51" type="stmt"/>
+        <line num="22" count="51" type="stmt"/>
+        <line num="23" count="51" type="stmt"/>
+        <line num="28" count="84" type="stmt"/>
         <line num="37" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="38" count="2" type="stmt"/>
         <line num="46" count="40" type="stmt"/>
@@ -150,19 +150,19 @@
         <line num="53" count="1" type="stmt"/>
         <line num="56" count="33" type="cond" truecount="2" falsecount="0"/>
         <line num="58" count="10" type="stmt"/>
-        <line num="63" count="23" type="stmt"/>
-        <line num="65" count="23" type="cond" truecount="2" falsecount="0"/>
-        <line num="66" count="3" type="stmt"/>
-        <line num="69" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="63" count="28" type="stmt"/>
+        <line num="65" count="28" type="cond" truecount="2" falsecount="0"/>
+        <line num="66" count="4" type="stmt"/>
+        <line num="69" count="24" type="cond" truecount="2" falsecount="0"/>
         <line num="70" count="1" type="stmt"/>
-        <line num="73" count="19" type="cond" truecount="4" falsecount="0"/>
-        <line num="74" count="15" type="stmt"/>
-        <line num="77" count="4" type="stmt"/>
+        <line num="73" count="23" type="cond" truecount="4" falsecount="0"/>
+        <line num="74" count="18" type="stmt"/>
+        <line num="77" count="5" type="stmt"/>
         <line num="80" count="6" type="stmt"/>
       </file>
     </package>
     <package name="jobly.models">
-      <metrics statements="122" coveredstatements="122" conditionals="36" coveredconditionals="35" methods="20" coveredmethods="20"/>
+      <metrics statements="131" coveredstatements="131" conditionals="42" coveredconditionals="41" methods="21" coveredmethods="21"/>
       <file name="_testCommon.js" path="/Users/AshleyLin1/rithm/exercises/jobly/models/_testCommon.js">
         <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
         <line num="3" count="3" type="stmt"/>
@@ -175,8 +175,8 @@
         <line num="16" count="3" type="stmt"/>
         <line num="22" count="3" type="stmt"/>
         <line num="35" count="3" type="stmt"/>
-        <line num="43" count="43" type="stmt"/>
-        <line num="47" count="43" type="stmt"/>
+        <line num="43" count="45" type="stmt"/>
+        <line num="47" count="45" type="stmt"/>
         <line num="51" count="3" type="stmt"/>
         <line num="55" count="3" type="stmt"/>
       </file>
@@ -255,7 +255,7 @@
         <line num="176" count="6" type="stmt"/>
       </file>
       <file name="user.js" path="/Users/AshleyLin1/rithm/exercises/jobly/models/user.js">
-        <metrics statements="40" coveredstatements="40" conditionals="14" coveredconditionals="14" methods="6" coveredmethods="6"/>
+        <metrics statements="49" coveredstatements="49" conditionals="20" coveredconditionals="20" methods="7" coveredmethods="7"/>
         <line num="3" count="6" type="stmt"/>
         <line num="4" count="6" type="stmt"/>
         <line num="5" count="6" type="stmt"/>
@@ -295,11 +295,20 @@
         <line num="198" count="6" type="stmt"/>
         <line num="204" count="6" type="stmt"/>
         <line num="206" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="211" count="6" type="stmt"/>
+        <line num="218" count="6" type="stmt"/>
+        <line num="220" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="221" count="1" type="stmt"/>
+        <line num="224" count="5" type="stmt"/>
+        <line num="230" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="231" count="1" type="stmt"/>
+        <line num="234" count="4" type="stmt"/>
+        <line num="247" count="4" type="stmt"/>
+        <line num="249" count="4" type="stmt"/>
+        <line num="254" count="6" type="stmt"/>
       </file>
     </package>
     <package name="jobly.routes">
-      <metrics statements="166" coveredstatements="166" conditionals="28" coveredconditionals="28" methods="31" coveredmethods="31"/>
+      <metrics statements="170" coveredstatements="170" conditionals="28" coveredconditionals="28" methods="32" coveredmethods="32"/>
       <file name="_testCommon.js" path="/Users/AshleyLin1/rithm/exercises/jobly/routes/_testCommon.js">
         <metrics statements="24" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
         <line num="3" count="4" type="stmt"/>
@@ -320,8 +329,8 @@
         <line num="63" count="4" type="stmt"/>
         <line num="71" count="4" type="stmt"/>
         <line num="79" count="4" type="stmt"/>
-        <line num="90" count="74" type="stmt"/>
-        <line num="94" count="74" type="stmt"/>
+        <line num="90" count="79" type="stmt"/>
+        <line num="94" count="79" type="stmt"/>
         <line num="98" count="4" type="stmt"/>
         <line num="102" count="4" type="stmt"/>
         <line num="104" count="4" type="stmt"/>
@@ -445,7 +454,7 @@
         <line num="133" count="5" type="stmt"/>
       </file>
       <file name="users.js" path="/Users/AshleyLin1/rithm/exercises/jobly/routes/users.js">
-        <metrics statements="34" coveredstatements="34" conditionals="4" coveredconditionals="4" methods="7" coveredmethods="7"/>
+        <metrics statements="38" coveredstatements="38" conditionals="4" coveredconditionals="4" methods="8" coveredmethods="8"/>
         <line num="5" count="5" type="stmt"/>
         <line num="7" count="5" type="stmt"/>
         <line num="12" count="5" type="stmt"/>
@@ -455,31 +464,35 @@
         <line num="16" count="5" type="stmt"/>
         <line num="17" count="5" type="stmt"/>
         <line num="19" count="5" type="stmt"/>
-        <line num="32" count="5" type="stmt"/>
-        <line num="36" count="4" type="stmt"/>
-        <line num="39" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="40" count="5" type="stmt"/>
-        <line num="41" count="2" type="stmt"/>
-        <line num="44" count="2" type="stmt"/>
+        <line num="33" count="5" type="stmt"/>
+        <line num="37" count="4" type="stmt"/>
+        <line num="40" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="5" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
         <line num="45" count="2" type="stmt"/>
         <line num="46" count="2" type="stmt"/>
-        <line num="56" count="5" type="stmt"/>
-        <line num="60" count="1" type="stmt"/>
-        <line num="61" count="1" type="stmt"/>
-        <line num="72" count="5" type="stmt"/>
-        <line num="76" count="4" type="stmt"/>
-        <line num="77" count="3" type="stmt"/>
-        <line num="91" count="5" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="58" count="5" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="75" count="5" type="stmt"/>
+        <line num="79" count="4" type="stmt"/>
+        <line num="80" count="3" type="stmt"/>
         <line num="95" count="5" type="stmt"/>
-        <line num="98" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="99" count="1" type="stmt"/>
-        <line num="100" count="1" type="stmt"/>
-        <line num="103" count="4" type="stmt"/>
-        <line num="104" count="3" type="stmt"/>
-        <line num="112" count="5" type="stmt"/>
-        <line num="116" count="4" type="stmt"/>
-        <line num="117" count="3" type="stmt"/>
-        <line num="120" count="5" type="stmt"/>
+        <line num="99" count="5" type="stmt"/>
+        <line num="102" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="103" count="1" type="stmt"/>
+        <line num="104" count="1" type="stmt"/>
+        <line num="107" count="4" type="stmt"/>
+        <line num="108" count="3" type="stmt"/>
+        <line num="117" count="5" type="stmt"/>
+        <line num="121" count="4" type="stmt"/>
+        <line num="122" count="3" type="stmt"/>
+        <line num="133" count="5" type="stmt"/>
+        <line num="137" count="3" type="stmt"/>
+        <line num="139" count="3" type="stmt"/>
+        <line num="140" count="2" type="stmt"/>
+        <line num="144" count="5" type="stmt"/>
       </file>
     </package>
   </project>

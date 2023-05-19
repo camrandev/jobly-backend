@@ -208,13 +208,19 @@ class User {
 
   /** Allows for a user to apply for a job.
    *
-   * Takes as input two parameters: a user username, and a job id.
+   * Takes as input two parameters: a user username, and a job id (strings).
    * Returns { username, jobId }
    *
    * Throws BadRequestError on duplicate job applications.
    **/
 
   static async applyForJob(username, jobId) {
+    jobId = parseInt(jobId)
+
+    if (typeof username !== 'string' || !Number.isInteger(jobId)) {
+      throw new BadRequestError('Invalid data in query string');
+    }
+
     const duplicateCheck = await db.query(`
       SELECT username, job_id
       FROM applications
@@ -238,7 +244,6 @@ class User {
     ],
     );
 
-    console.log("result", result)
     const jobApp = result.rows[0];
 
     return jobApp;

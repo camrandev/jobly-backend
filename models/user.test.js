@@ -215,7 +215,7 @@ describe("remove", function () {
   test("works", async function () {
     await User.remove("u1");
     const res = await db.query(
-        "SELECT * FROM users WHERE username='u1'");
+      "SELECT * FROM users WHERE username='u1'");
     expect(res.rows.length).toEqual(0);
   });
 
@@ -225,6 +225,37 @@ describe("remove", function () {
       throw new Error("fail test, you shouldn't get here");
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+});
+
+/************************************** create job application */
+
+describe("applyForJob", function () {
+
+  test("works", async function () {
+    const jobApp = await User.applyForJob("u1", "1");
+    expect(jobApp).toEqual({
+      username: "u1",
+      jobId: 1,
+    });
+
+    const found = await db.query(
+      "SELECT * FROM applications WHERE username = 'u1' AND job_id=1"
+    );
+
+    expect(found.rows.length).toEqual(1);
+    expect(found.rows[0].username).toEqual('u1');
+    expect(found.rows[0].job_id).toEqual(1);
+  });
+
+  test("bad request with dup data", async function () {
+    try {
+      await User.applyForJob("u1", "1");
+      await User.applyForJob("u1", "1");
+      throw new Error("fail test, you shouldn't get here");
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
     }
   });
 });

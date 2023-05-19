@@ -378,3 +378,47 @@ describe("DELETE /users/:username", function () {
     expect(resp.statusCode).toEqual(404);
   });
 });
+
+/************************************** POST /users/:username/jobs/:id */
+
+describe("POST /users/:username/jobs/:id", function () {
+  test("works for admin: create job application", async function () {
+    const resp = await request(app)
+      .post("/users/u1/jobs/1")
+      .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.statusCode).toEqual(201);
+    expect(resp.body).toEqual({
+      applied: 1
+    });
+  });
+
+  test("works for curr user: create job application", async function () {
+    const resp = await request(app)
+      .post("/users/u1/jobs/2")
+      .set("authorization", `Bearer ${nonAdminToken}`);
+    expect(resp.statusCode).toEqual(201);
+    expect(resp.body).toEqual({
+      applied: 2
+    });
+  });
+
+  test("unauthorized for regular user (not curr or admin)", async function () {
+    const resp = await request(app)
+      .post("/users/u2/jobs/1")
+      .set("authorization", `Bearer ${nonAdminToken}`);
+    expect(resp.statusCode).toEqual(401);
+  });
+
+  test("unauth for not logged in user", async function () {
+    const resp = await request(app)
+      .post("/users/u1/jobs/1")
+    expect(resp.statusCode).toEqual(401);
+  });
+
+  test("bad request if invalid data in query string", async function () {
+    const resp = await request(app)
+      .post("/users/u1/jobs/taco")
+      .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.statusCode).toEqual(400);
+  });
+});
