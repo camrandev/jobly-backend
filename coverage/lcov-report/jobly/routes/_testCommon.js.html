@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>24/24</span>
+                <span class='fraction'>27/27</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>24/24</span>
+                <span class='fraction'>27/27</span>
             </div>
         
             
@@ -172,11 +172,7 @@
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L110'></a><a href='#L110'>110</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -190,26 +186,9 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,8 +209,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -262,6 +253,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -274,7 +267,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -294,62 +286,57 @@
 const db = require("../db.js");
 const User = require("../models/user");
 const Company = require("../models/company");
-const Job = require("../models/jobs")
+const Job = require("../models/jobs");
 const { createToken } = require("../helpers/tokens");
 &nbsp;
 async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
-  await db.query("ALTER SEQUENCE jobs_id_seq RESTART WITH 1")
+  await db.query("ALTER SEQUENCE jobs_id_seq RESTART WITH 1");
   await db.query("DELETE FROM users");
   await db.query("DELETE FROM companies");
-  await db.query("DELETE FROM jobs")
+  await db.query("DELETE FROM jobs");
+  await db.query("DELETE FROM applications");
 &nbsp;
-  await Company.create(
-    {
-      handle: "c1",
-      name: "C1",
-      numEmployees: 1,
-      description: "Desc1",
-      logoUrl: "http://c1.img",
-    });
-  await Company.create(
-    {
-      handle: "c2",
-      name: "C2",
-      numEmployees: 2,
-      description: "Desc2",
-      logoUrl: "http://c2.img",
-    });
-  await Company.create(
-    {
-      handle: "c3",
-      name: "C3",
-      numEmployees: 3,
-      description: "Desc3",
-      logoUrl: "http://c3.img",
-    });
+  await Company.create({
+    handle: "c1",
+    name: "C1",
+    numEmployees: 1,
+    description: "Desc1",
+    logoUrl: "http://c1.img",
+  });
+  await Company.create({
+    handle: "c2",
+    name: "C2",
+    numEmployees: 2,
+    description: "Desc2",
+    logoUrl: "http://c2.img",
+  });
+  await Company.create({
+    handle: "c3",
+    name: "C3",
+    numEmployees: 3,
+    description: "Desc3",
+    logoUrl: "http://c3.img",
+  });
 &nbsp;
-  await Job.create(
-    {
-      title: "t1",
-      salary: 5,
-      equity: 0.2,
-      companyHandle: "c1",
-    });
-  await Job.create(
-    {
-      title: "t2",
-      salary: 10,
-      equity: 0.4,
-      companyHandle: "c2",
-    });
-  await Job.create(
-    {
-      title: "t3",
-      salary: 15,
-      equity: 0.6,
-      companyHandle: "c3",
-    });
+  await Job.create({
+    title: "t1",
+    salary: 5,
+    equity: 0.2,
+    companyHandle: "c1",
+  });
+  await Job.create({
+    title: "t2",
+    salary: 10,
+    equity: 0.4,
+    companyHandle: "c2",
+  });
+  await Job.create({
+    title: "t3",
+    salary: 15,
+    equity: 0.6,
+    companyHandle: "c3",
+  });
 &nbsp;
   await User.register({
     username: "u1",
@@ -375,6 +362,8 @@ async function commonBeforeAll() {
     password: "password3",
     isAdmin: true,
   });
+  await User.applyForJob("u1", 1);
+  await User.applyForJob("u1", 2);
 }
 &nbsp;
 async function commonBeforeEach() {
@@ -388,7 +377,6 @@ async function commonAfterEach() {
 async function commonAfterAll() {
   await db.end();
 }
-&nbsp;
 &nbsp;
 const nonAdminToken = createToken({ username: "u1", isAdmin: false });
 &nbsp;
@@ -409,7 +397,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-05-19T17:33:52.778Z
+                at 2023-05-19T19:00:33.605Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

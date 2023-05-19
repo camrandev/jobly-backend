@@ -105,40 +105,24 @@ class User {
 
   /** Find all users.
    *
-   * Returns [{ username, first_name, last_name, email, is_admin }, ...]
+   * Returns [{ username, firstName, lastName, email, isAdmin, jobs }, ...]
    **/
 
   static async findAll() {
-    const userRes = await db.query(`
-        SELECT username,
-               first_name AS "firstName",
-               last_name  AS "lastName",
-               email,
-               is_admin   AS "isAdmin"
-        FROM users
-        ORDER BY username`);
+    const resp = await db.query(`
+        SELECT u.username,
+               u.first_name AS "firstName",
+               u.last_name  AS "lastName",
+               u.email,
+               u.is_admin   AS "isAdmin",
+               COALESCE(JSON_AGG(a.job_id) FILTER (WHERE a.job_id IS NOT NULL), '[]') AS "jobs"
+        FROM users AS u
+        LEFT JOIN applications AS a
+          ON a.username = u.username
+        GROUP BY u.username
+        ORDER BY u.username`);
 
-    const users = userRes.rows;
-
-    const jobAppsRes = await db.query(`
-    SELECT username, job_id AS "jobId"
-    FROM applications
-    ORDER BY username`);
-
-    const jobApps = jobAppsRes.rows;
-
-    for (let user of users) {
-      user.jobs = jobApps.map((jobApp) => {
-        if ((jobApp.username === user.username)) {
-          console.log('jobApp from map', jobApp)
-          return jobApp.jobId;
-        }
-      }).filter((value) => value !== undefined);
-    }
-
-    console.log('users from findAll', users)
-
-    return users;
+    return resp.rows;
   }
 
   /** Given a username, return data about user.
