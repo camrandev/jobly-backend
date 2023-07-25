@@ -39,7 +39,8 @@ the frontend will now be running locally on port 3000
 
 
 ## Tests
-- This project has 100% test coverage
+- This project has 100% coverage of statements, functions, and lines.
+- Branch coverage is at ~95%
 
 to run the tests
 ```
@@ -49,6 +50,7 @@ jest -i --coverage (generate a coverage report)
 
 ## To-Dos
 - implement the routes to allow users to apply to jobs
+- get to 100% branch coverage
 - clean + refactor code as appropriate
 - refactor the project to use typescript
 
