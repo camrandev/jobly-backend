@@ -1,12 +1,6 @@
 # Jobly - Backend
 Jobly is an indeed like application
 
-You can view the frontend [here](https://github.com/camrandev/jobly-frontend)
-
-View the deployed site [here](https://general-honey.surge.sh/), deployed with Render and Surge
-
-Login: testuser | Password: password
-
 ## Tech Stack
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
